@@ -144,7 +144,7 @@ async fn index(scrape: Json<Scrape<'_>>, browser: &State<Browser>) -> Result<Jso
 
             let article_html = page.content().await.map_err(map_browser_err)?;            
 
-            articles.push(Article::parse_from_html(article_url.clone(), article_html)?);
+            articles.push(Article::parse_from_html(article_url.clone(), article_html).map_err(|e| Custom(Status::new(500), e.to_string()))?);
         }
 
         match next_page {
@@ -166,7 +166,7 @@ async fn index(scrape: Json<Scrape<'_>>, browser: &State<Browser>) -> Result<Jso
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     setup_logger().unwrap();
     let ( browser, mut handler) =
-        Browser::launch(BrowserConfig::builder().build()?).await?;
+        Browser::launch(BrowserConfig::builder().build()?).await.map_err(|e| { error!("error launching browser: {}", e); e })?;
     
     // spawn a new task that continuously polls the handler
     let handle = tokio::task::spawn(async move {
