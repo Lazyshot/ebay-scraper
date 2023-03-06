@@ -10,7 +10,7 @@ chromiumoxide = { version = "0.4.0", features = ["tokio-runtime"], default-featu
 rocket = { version = "0.5.0-rc.2", features = ["json"] }
 serde = { version = "1.0", features = ["derive"] }
 scraper = "0.14.0"
-tokio = "1.25.0"
+tokio = "1.26.0"
 log = "0.4.17"
 fern = "0.6.1"
 chrono = "0.4.23"
